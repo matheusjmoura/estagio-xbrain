@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from '@material-ui/core';
+import formatCurrency from '../util';
 
 export default class Products extends Component {
   render() {
@@ -14,7 +15,7 @@ export default class Products extends Component {
                   <p>{product.title}</p>
                 </a>
                 <div className="product-price">
-                  <div>{product.price}</div>
+                  <div>{formatCurrency(product.price)}</div>
                   <Button variant="contained" color="primary">
                     ADICIONAR
                   </Button>
