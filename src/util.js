@@ -1,3 +1,8 @@
 export default function formatCurrency(num) {
-  return 'R$' + Number(num.toFixed(2)).toLocaleString() + ' ';
+  return (
+    Number(num.toFixed(2)).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }) + ' '
+  );
 }
