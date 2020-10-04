@@ -7,6 +7,9 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Fade from 'react-reveal/Fade';
+import Modal from 'react-modal';
+import Zoom from 'react-reveal/Zoom';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles({
   root: {
@@ -20,14 +23,27 @@ const useStyles = makeStyles({
 });
 
 export default class Products extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      product: null,
+    };
+  }
+  openModal = (product) => {
+    this.setState({ product });
+  };
+  closeModal = () => {
+    this.setState({ product: null });
+  };
   MediaCard = () => {
     const classes = useStyles();
+    const { product } = this.state;
     return (
       <div className="products">
         <Fade bottom cadade>
           {this.props.products.map((product) => (
             <Card className={classes.root} key={product._id} elevation={0}>
-              <CardActionArea onClick={() => this.props.addToCart(product)}>
+              <CardActionArea onClick={() => this.openModal(product)}>
                 <CardMedia
                   className={classes.media}
                   image={product.image}
@@ -65,6 +81,21 @@ export default class Products extends Component {
             </Card>
           ))}
         </Fade>
+        {product && (
+          <Modal isOpen={true} onRequestClose={this.closeModal}>
+            <Zoom>
+              <button onClick={this.closeModal}>x</button>
+              <Button
+                onClick={() => this.props.addToCart(product)}
+                variant="contained"
+                color="primary"
+              >
+                ADICIONAR AO CARRINHO
+              </Button>
+              <div>Modal</div>
+            </Zoom>
+          </Modal>
+        )}
       </div>
     );
   };

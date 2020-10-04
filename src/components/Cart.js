@@ -1,7 +1,45 @@
-import { Button } from '@material-ui/core';
+import { Button, MenuItem, TextField } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import React, { Component } from 'react';
 import formatCurrency from '../util';
 import Fade from 'react-reveal/Fade';
+
+const useStyles = makeStyles({
+  removeButton: {
+    background: 'linear-gradient(45deg, #ff0000 30%, #ff4040 90%)',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 2px 4px 1px rgba(255, 105, 135, .3)',
+    color: 'white',
+    height: 25,
+    padding: '0 30px',
+    '&:hover': {
+      boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    },
+  },
+  proceedButton: {
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color: 'white',
+    height: 25,
+    padding: '0 30px',
+  },
+  checkoutButton: {
+    background: '#FF9800',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 10px 2px rgba(255, 105, 135, .3)',
+    color: 'white',
+    height: 25,
+    padding: '0 30px',
+    '&:hover': {
+      background: '#cc7a00',
+      boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    },
+  },
+});
 
 export default class Cart extends Component {
   constructor(props) {
@@ -26,7 +64,8 @@ export default class Cart extends Component {
     };
     this.props.createOrder(order);
   };
-  render() {
+  Cart = () => {
+    const classes = useStyles();
     const { cartItems } = this.props;
     return (
       <div>
@@ -54,8 +93,7 @@ export default class Cart extends Component {
                         {formatCurrency(item.price)} x {item.count}{' '}
                         <Button
                           onClick={() => this.props.removeFromCart(item)}
-                          variant="contained"
-                          color="primary"
+                          className={classes.removeButton}
                         >
                           REMOVER
                         </Button>
@@ -93,37 +131,45 @@ export default class Cart extends Component {
                     <form onSubmit={this.createOrder}>
                       <ul className="form-container">
                         <li>
-                          <label>Email</label>
-                          <input
-                            name="email"
-                            type="email"
+                          <TextField
                             required
-                            onChange={this.handleInput}
-                          ></input>
-                        </li>
-                        <li>
-                          <label>Nome</label>
-                          <input
                             name="name"
-                            type="text"
-                            required
+                            label="Nome"
+                            variant="outlined"
                             onChange={this.handleInput}
-                          ></input>
+                          />
                         </li>
                         <li>
-                          <label>Endereço</label>
-                          <input
-                            name="address"
-                            type="text"
+                          <TextField
                             required
+                            name="email"
+                            label="Email"
+                            type="email"
+                            variant="outlined"
                             onChange={this.handleInput}
-                          ></input>
+                          />
+                        </li>
+                        <li>
+                          <TextField
+                            select
+                            required
+                            name="gender"
+                            label="Gênero"
+                            onChange={this.handleInput}
+                            variant="outlined"
+                          >
+                            <MenuItem key="male" value="male">
+                              Masculino
+                            </MenuItem>
+                            <MenuItem key="female" value="female">
+                              Feminino
+                            </MenuItem>
+                          </TextField>
                         </li>
                         <li>
                           <Button
                             type="submit"
-                            variant="contained"
-                            color="primary"
+                            className={classes.checkoutButton}
                           >
                             FINALIZAR COMPRA
                           </Button>
@@ -136,6 +182,14 @@ export default class Cart extends Component {
             </div>
           )}
         </div>
+      </div>
+    );
+  };
+  render() {
+    const Cart = this.Cart;
+    return (
+      <div>
+        <Cart />
       </div>
     );
   }
