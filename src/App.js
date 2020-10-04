@@ -16,7 +16,7 @@ class App extends React.Component {
     };
   }
   createOrder = (order) => {
-    alert('Pedido precisa ser salvo para' + order.name);
+    alert('Pedido precisa ser salvo para ' + order.name);
   };
   removeFromCart = (product) => {
     const cartItems = this.state.cartItems.slice();
