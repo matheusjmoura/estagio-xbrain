@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import formatCurrency from '../util';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
 import Fade from 'react-reveal/Fade';
 import Modal from 'react-modal';
 import Zoom from 'react-reveal/Zoom';
-import { Button } from '@material-ui/core';
+import {
+  makeStyles,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+  TextField,
+  Fab,
+} from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 const useStyles = makeStyles({
   root: {
@@ -25,8 +31,10 @@ const useStyles = makeStyles({
 export default class Products extends Component {
   constructor(props) {
     super(props);
+    this.quantityRef = React.createRef();
     this.state = {
       product: null,
+      quantity: 0,
     };
   }
   openModal = (product) => {
@@ -38,11 +46,12 @@ export default class Products extends Component {
   MediaCard = () => {
     const classes = useStyles();
     const { product } = this.state;
+
     return (
       <div className="products">
-        <Fade bottom cadade>
+        <Fade bottom cascade>
           {this.props.products.map((product) => (
-            <Card className={classes.root} key={product._id} elevation={0}>
+            <Card className={classes.root} elevation={0} key={product._id}>
               <CardActionArea onClick={() => this.openModal(product)}>
                 <CardMedia
                   className={classes.media}
@@ -85,14 +94,65 @@ export default class Products extends Component {
           <Modal isOpen={true} onRequestClose={this.closeModal}>
             <Zoom>
               <button onClick={this.closeModal}>x</button>
-              <Button
-                onClick={() => this.props.addToCart(product)}
-                variant="contained"
-                color="primary"
-              >
-                ADICIONAR AO CARRINHO
-              </Button>
-              <div>Modal</div>
+              <div className="product-details">
+                <img src={product.image} alt={product.title}></img>
+                <div className="product-details-description">
+                  <p>
+                    <strong>{product.title}</strong>
+                  </p>
+                  <p>
+                    <div>{formatCurrency(product.price)}</div>
+                  </p>
+                </div>
+                <div className="product-buttons">
+                  <div>
+                    <Fab
+                      size="medium"
+                      aria-label="add"
+                      className={classes.margin}
+                      onClick={() => {
+                        this.setState({ quantity: this.state.quantity + 1 });
+                        this.quantityRef.current.value = this.state.quantity;
+                      }}
+                    >
+                      <AddIcon />
+                    </Fab>
+                    <TextField
+                      id="quantity"
+                      value={this.state.quantity}
+                      InputProps={{ inputProps: { min: 0 } }}
+                      variant="outlined"
+                      ref={this.quantityRef}
+                    />
+                    <Fab
+                      size="medium"
+                      aria-label="add"
+                      className={classes.margin}
+                      onClick={() => {
+                        if (this.state.quantity !== 0) {
+                          this.setState({ quantity: this.state.quantity - 1 });
+
+                          this.quantityRef.current.value = this.state.quantity;
+                        }
+                      }}
+                    >
+                      <RemoveIcon />
+                    </Fab>
+                  </div>
+                  <div>
+                    <Button
+                      onClick={() => {
+                        this.props.addToCart(product, this.state.quantity);
+                        this.closeModal();
+                      }}
+                      variant="contained"
+                      color="primary"
+                    >
+                      ADICIONAR AO CARRINHO
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </Zoom>
           </Modal>
         )}

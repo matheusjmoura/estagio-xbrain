@@ -5,6 +5,7 @@ html {
 
 body,
 #root {
+  zoom: 110%;
   height: 100vh;
   margin: 0;
 }
@@ -58,6 +59,7 @@ main {
 
 .sidebar {
   flex: 1 20rem;
+  margin: 0 0 5rem 0;
 }
 
 /* products */
@@ -141,17 +143,55 @@ main {
 form {
   width: 100%;
 }
+
 .form-container {
   width: 100%;
   padding: 0;
   list-style-type: none;
 }
+
 .form-container li {
   display: flex;
   flex-direction: column;
   padding: 1rem;
 }
+
 input {
   padding: 1rem;
   border: 0.1rem #c0c0c0 solid;
+}
+
+/* Product Details */
+.product-details {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-between;
+  max-height: 96vh;
+}
+
+.product-details img {
+  max-height: 100vh;
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+.product-details-description {
+  flex: 1 1;
+  margin: 1rem;
+}
+
+.product-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.close-modal {
+  position: absolute;
+  right: 1rem;
+  top: 2.5rem;
+  z-index: 1000;
 }
