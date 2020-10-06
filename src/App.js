@@ -16,7 +16,7 @@ class App extends React.Component {
     };
   }
   createOrder = (order) => {
-    alert('Pedido precisa ser salvo para' + order.name);
+    alert('Pedido precisa ser salvo para ' + order.name);
   };
   removeFromCart = (product) => {
     const cartItems = this.state.cartItems.slice();
@@ -28,17 +28,19 @@ class App extends React.Component {
       JSON.stringify(cartItems.filter((x) => x._id !== product._id))
     );
   };
-  addToCart = (product) => {
+  addToCart = (product, quantity) => {
     const cartItems = this.state.cartItems.slice();
-    let alreadyInCart = false;
-    cartItems.forEach((item) => {
-      if (item._id === product._id) {
-        item.count++;
-        alreadyInCart = true;
+    for (var i = 0; i < quantity; i++) {
+      let alreadyInCart = false;
+      cartItems.forEach((item) => {
+        if (item._id === product._id) {
+          item.count++;
+          alreadyInCart = true;
+        }
+      });
+      if (!alreadyInCart) {
+        cartItems.push({ ...product, count: 1 });
       }
-    });
-    if (!alreadyInCart) {
-      cartItems.push({ ...product, count: 1 });
     }
     this.setState({ cartItems });
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
