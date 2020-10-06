@@ -1,8 +1,10 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import Cart from './components/Cart';
 // import Filter from './components/Filter';
 import Products from './components/Products';
 import data from './data.json';
+import store from './store';
 
 class App extends React.Component {
   constructor() {
@@ -68,34 +70,35 @@ class App extends React.Component {
   };
   render() {
     return (
-      <div className="grid-container">
-        <header>
-          <a href="/">Produtos</a>
-        </header>
-        <main>
-          <div className="content">
-            <div className="main">
-              {/* <Filter
+      <Provider store={store}>
+        <div className="grid-container">
+          <header>
+            <a href="/">Produtos</a>
+          </header>
+          <main>
+            <div className="content">
+              <div className="main">
+                {/* <Filter
                 count={this.state.products.length}
                 sort={this.state.sort}
                 sortProducts={this.sortProducts}
               ></Filter> */}
-              <Products
-                products={this.state.products}
-                addToCart={this.addToCart}
-              ></Products>
-              <div>Dados do Cliente</div>
+                <Products
+                  products={this.state.products}
+                  addToCart={this.addToCart}
+                ></Products>
+              </div>
+              <div className="sidebar">
+                <Cart
+                  cartItems={this.state.cartItems}
+                  removeFromCart={this.removeFromCart}
+                  createOrder={this.createOrder}
+                />
+              </div>
             </div>
-            <div className="sidebar">
-              <Cart
-                cartItems={this.state.cartItems}
-                removeFromCart={this.removeFromCart}
-                createOrder={this.createOrder}
-              />
-            </div>
-          </div>
-        </main>
-      </div>
+          </main>
+        </div>
+      </Provider>
     );
   }
 }
