@@ -5,6 +5,9 @@ import formatCurrency from '../util';
 import Fade from 'react-reveal/Fade';
 import { connect } from 'react-redux';
 import { removeFromCart } from '../actions/cartActions';
+import { createOrder, clearOrder } from '../actions/orderActions';
+import Modal from 'react-modal';
+import Zoom from 'react-reveal/Zoom';
 
 const useStyles = makeStyles({
   removeButton: {
@@ -49,7 +52,7 @@ class Cart extends Component {
     this.state = {
       name: '',
       email: '',
-      address: '',
+      gender: '',
       showCheckout: false,
       item: null,
     };
@@ -62,14 +65,18 @@ class Cart extends Component {
     const order = {
       name: this.state.name,
       email: this.state.email,
-      address: this.state.address,
+      gender: this.state.gender,
       cartItems: this.props.cartItems,
+      total: this.props.cartItems.reduce((a, c) => a + c.price * c.count, 0),
     };
     this.props.createOrder(order);
   };
+  closeModal = () => {
+    this.props.clearOrder();
+  };
   Cart = () => {
     const classes = useStyles();
-    const { cartItems } = this.props;
+    const { cartItems, order } = this.props;
     return (
       <div>
         {cartItems.length === 0 ? (
@@ -80,6 +87,44 @@ class Cart extends Component {
               ? `Você tem ${cartItems.length} produto no carrinho.${' '}`
               : `Você tem ${cartItems.length} produtos no carrinho.${' '}`}
           </div>
+        )}
+        {order && (
+          <Modal isOpen={true} onRequestClose={this.closeModal}>
+            <Zoom>
+              <button className="close-modal" onClick={this.closeModal}>
+                x
+              </button>
+              <div className="order-details">
+                <h3>Pedido nº: {order._id}</h3>
+                <ul>
+                  <li>
+                    <div>{order.name}</div>
+                  </li>
+                  <li>
+                    <div>
+                      Sua compra no valor de {formatCurrency(order.total)} foi
+                      finalizada com sucesso.
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <img
+                        alt="Compra efetuada com sucesso."
+                        src={process.env.PUBLIC_URL + 'images/purchase.png'}
+                      />
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <Button className={classes.checkoutButton}>
+                        INICIAR NOVA COMPRA
+                      </Button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </Zoom>
+          </Modal>
         )}
         <div>
           <div className="cart">
@@ -200,9 +245,12 @@ class Cart extends Component {
 
 export default connect(
   (state) => ({
+    order: state.order.order,
     cartItems: state.cart.cartItems,
   }),
   {
     removeFromCart,
+    createOrder,
+    clearOrder,
   }
 )(Cart);
