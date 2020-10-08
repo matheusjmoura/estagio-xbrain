@@ -37,6 +37,7 @@ header {
   display: flex;
   align-items: center;
   border-bottom: 0.15rem #c0c0c0 solid;
+  justify-content: space-between;
 }
 
 header a {
@@ -87,8 +88,8 @@ main {
 
 /* Index.css */
 .cart {
-  padding: 0;
-  margin: 2rem 0 0 0;
+  padding: 1rem;
+  margin: 1.3rem;
   display: flex;
   flex-wrap: wrap;
 }
