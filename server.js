@@ -10,7 +10,7 @@ app.use('/', express.static(__dirname + '/build'));
 app.get('/', (req, res) => res.sendFile(__dirname + '/build/index.html'));
 
 mongoose.connect(
-  process.env.MONGODB_URL || 'mongodb://localhost/estagio-xbrain-db',
+  'mongodb+srv://xbrain:w7Y6RCyEKujuWgWD@estagio-xbrain.wmrgh.gcp.mongodb.net/estagio-xbrain-db?retryWrites=true&w=majority',
   {
     useNewUrlParser: true,
     useCreateIndex: true,
