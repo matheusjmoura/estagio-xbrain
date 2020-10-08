@@ -16,6 +16,8 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import { connect } from 'react-redux';
+import { fetchProducts } from '../actions/productActions';
 
 const useStyles = makeStyles({
   root: {
@@ -28,7 +30,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default class Products extends Component {
+class Products extends Component {
   constructor(props) {
     super(props);
     this.quantityRef = React.createRef();
@@ -36,6 +38,9 @@ export default class Products extends Component {
       product: null,
       quantity: 0,
     };
+  }
+  componentDidMount() {
+    this.props.fetchProducts();
   }
   openModal = (product) => {
     this.setState({ product });
@@ -48,47 +53,55 @@ export default class Products extends Component {
     const { product } = this.state;
 
     return (
-      <div className="products">
+      <div>
         <Fade bottom cascade>
-          {this.props.products.map((product) => (
-            <Card className={classes.root} elevation={0} key={product._id}>
-              <CardActionArea onClick={() => this.openModal(product)}>
-                <CardMedia
-                  className={classes.media}
-                  image={product.image}
-                  title={product.title}
-                />
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="body1"
-                    color="textPrimary"
-                    component="p"
-                  >
-                    {product.title}
-                  </Typography>
-                  <Typography gutterBottom variant="h6" component="p">
-                    {formatCurrency(product.price)}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    Em até 12x de {formatCurrency(product.price / 12)}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    component="p"
-                  >
-                    {formatCurrency(product.price - product.price * 0.1)} à
-                    vista (10% de desconto)
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          ))}
+          {!this.props.products ? (
+            <div>
+              <p>Carregando...</p>
+            </div>
+          ) : (
+            <div className="products">
+              {this.props.products.map((product) => (
+                <Card className={classes.root} elevation={0} key={product._id}>
+                  <CardActionArea onClick={() => this.openModal(product)}>
+                    <CardMedia
+                      className={classes.media}
+                      image={product.image}
+                      title={product.title}
+                    />
+                    <CardContent>
+                      <Typography
+                        gutterBottom
+                        variant="body1"
+                        color="textPrimary"
+                        component="p"
+                      >
+                        {product.title}
+                      </Typography>
+                      <Typography gutterBottom variant="h6" component="p">
+                        {formatCurrency(product.price)}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        Em até 12x de {formatCurrency(product.price / 12)}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                      >
+                        {formatCurrency(product.price - product.price * 0.1)} à
+                        vista (10% de desconto)
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              ))}
+            </div>
+          )}
         </Fade>
         {product && (
           <Modal isOpen={true} onRequestClose={this.closeModal}>
@@ -169,3 +182,7 @@ export default class Products extends Component {
     );
   }
 }
+
+export default connect((state) => ({ products: state.products.items }), {
+  fetchProducts,
+})(Products);
