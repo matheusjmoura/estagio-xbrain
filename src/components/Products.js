@@ -107,7 +107,9 @@ class Products extends Component {
         {product && (
           <Modal isOpen={true} onRequestClose={this.closeModal}>
             <Zoom>
-              <button onClick={this.closeModal}>x</button>
+              <button className="close-modal" onClick={this.closeModal}>
+                x
+              </button>
               <div className="product-details">
                 <img src={product.image} alt={product.title}></img>
                 <div className="product-details-description">
