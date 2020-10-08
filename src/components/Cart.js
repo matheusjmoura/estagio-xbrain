@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import formatCurrency from '../util';
 import Fade from 'react-reveal/Fade';
 import { connect } from 'react-redux';
-import { removeFromCart } from '../actions/cartActions';
+import { removeFromCart, removeAllFromCart } from '../actions/cartActions';
 import { createOrder, clearOrder } from '../actions/orderActions';
 import Modal from 'react-modal';
 import Zoom from 'react-reveal/Zoom';
@@ -73,6 +73,7 @@ class Cart extends Component {
   };
   closeModal = () => {
     this.props.clearOrder();
+    this.props.removeAllFromCart();
   };
   Cart = () => {
     const classes = useStyles();
@@ -112,13 +113,6 @@ class Cart extends Component {
                         alt="Compra efetuada com sucesso."
                         src={process.env.PUBLIC_URL + 'images/purchase.png'}
                       />
-                    </div>
-                  </li>
-                  <li>
-                    <div>
-                      <Button className={classes.checkoutButton}>
-                        INICIAR NOVA COMPRA
-                      </Button>
                     </div>
                   </li>
                 </ul>
@@ -250,6 +244,7 @@ export default connect(
   }),
   {
     removeFromCart,
+    removeAllFromCart,
     createOrder,
     clearOrder,
   }

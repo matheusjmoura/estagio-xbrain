@@ -212,6 +212,13 @@ input {
   align-items: center;
 }
 
+.order-details ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .order-details li div {
   padding: 10px;
 }
